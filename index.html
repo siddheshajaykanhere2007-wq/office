@@ -3,52 +3,86 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Download MicroOffice Suite Pro</title>
+    
+    <title>MicroOffice Pro - Super Light Office App for Windows</title>
+    <meta name="description" content="Download MicroOffice Pro, a super light office app suite for Windows. Includes quick spreadsheet, text, and presentation tools using lightweight HTA.">
+    <meta name="keywords" content="super light office app, lightweight office, microoffice pro, hta office app, tiny office windows">
+    <meta name="author" content="siddheshajaykanhere2007-wq">
+
     <style>
         body {
-            font-family: 'Segoe UI', Arial, sans-serif;
-            background-color: #0f111a;
-            color: #ffffff;
-            margin: 0; padding: 0;
-            display: flex; justify-content: center; align-items: center;
-            height: 100vh; text-align: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #0f172a;
+            color: #f8fafc;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
         }
-        .download-card {
-            background: #1e1e24;
-            padding: 40px;
-            border-radius: 12px;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.5);
-            max-width: 450px;
-            border: 1px solid #2d2d35;
+        .container {
+            text-align: center;
+            background-color: #1e293b;
+            padding: 3rem;
+            border-radius: 1rem;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.3);
+            max-width: 500px;
+            width: 90%;
+            border: 1px solid #334155;
         }
-        h1 { font-size: 28px; margin-bottom: 10px; color: #0f6cbd; }
-        p { color: #a0a0a5; font-size: 15px; line-height: 1.6; margin-bottom: 30px; }
-        .btn-download {
-            display: inline-block;
-            background-color: #0f6cbd;
+        h1 {
+            color: #3b82f6;
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        h2 {
+            font-size: 1.1rem;
+            color: #94a3b8;
+            font-weight: 400;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #2563eb;
             color: white;
+            padding: 0.75rem 2rem;
+            font-size: 1.1rem;
+            font-weight: 600;
             text-decoration: none;
-            padding: 14px 30px;
-            font-weight: bold;
-            font-size: 16px;
-            border-radius: 6px;
-            transition: background 0.2s;
-            box-shadow: 0 4px 15px rgba(15, 108, 189, 0.4);
+            border-radius: 0.5rem;
+            transition: background-color 0.2s, transform 0.1s;
+            box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.2);
         }
-        .btn-download:hover { background-color: #127cd6; }
-        .footer-note { font-size: 11px; color: #666; margin-top: 25px; }
+        .btn:hover {
+            background-color: #1d4ed8;
+        }
+        .btn:active {
+            transform: scale(0.98);
+        }
+        .footer {
+            margin-top: 2.5rem;
+            font-size: 0.8rem;
+            color: #64748b;
+        }
     </style>
 </head>
 <body>
 
-<div class="download-card">
-    <h1>MicroOffice Pro</h1>
-    <p>Get the lightweight desktop productivity application suite for Windows. Includes Word Document Editor, Spreadsheet Engine, and Presentation Workspace.</p>
-    
-    <a href="MicroOfficePro.zip" class="btn-download">📥 Download Desktop App</a>
-    
-    <div class="footer-note">Compatible with Windows 7, 8, 10, and 11. Powered by MSHTA.</div>
-</div>
+    <div class="container">
+        <h1>MicroOffice Pro</h1>
+        <h2>Get the ultimate super light office app suite for Windows. Includes Word Document Editor, Spreadsheet Engine, and Presentation Workspace.</h2>
+        
+        <a href="MicroOfficePro.zip" class="btn" download>
+            📩 Download Desktop App
+        </a>
+        
+        <div class="footer">
+            Compatible with Windows 7, 8, 10, and 11. Powered by MSHTA.
+        </div>
+    </div>
 
 </body>
 </html>
