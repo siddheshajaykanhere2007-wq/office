@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MicroOffice Pro - Online Suite & Desktop App</title>
+    <title>MicroOffice Pro - Advanced Web Suite</title>
     <style>
         :root {
             --bg-color: #0f172a;
@@ -26,7 +26,6 @@
             min-height: 100vh;
         }
 
-        /* Top Navigation Bar containing the Suite switchers */
         header {
             background-color: var(--card-bg);
             border-bottom: 1px solid var(--border-color);
@@ -64,14 +63,13 @@
             border-color: var(--accent-blue);
         }
 
-        /* Main Web App Workspace Workspace */
         main {
             flex: 1;
             display: flex;
             flex-direction: column;
             align-items: center;
             padding: 2rem;
-            max-width: 1000px;
+            max-width: 1100px;
             width: 100%;
             margin: 0 auto;
             box-sizing: border-box;
@@ -95,35 +93,80 @@
             display: block;
         }
 
-        /* Web Module Components Custom Styles */
-        textarea {
+        /* Formatting Toolbar Styles */
+        .toolbar {
+            display: flex;
+            gap: 0.5rem;
+            background-color: #111827;
+            padding: 0.5rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .tool-btn {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 0.4rem 0.8rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .tool-btn:hover {
+            background-color: var(--border-color);
+        }
+
+        select {
+            background-color: var(--card-bg);
+            color: var(--text-main);
+            border: 1px solid var(--border-color);
+            padding: 0.4rem;
+            border-radius: 4px;
+        }
+
+        /* Editor Workspaces */
+        .editor-box {
             width: 100%;
-            height: 300px;
+            height: 350px;
             background-color: var(--bg-color);
             color: var(--text-main);
             border: 1px solid var(--border-color);
             border-radius: 8px;
             padding: 1rem;
             box-sizing: border-box;
-            resize: none;
-            font-family: inherit;
+            overflow-y: auto;
+            outline: none;
+        }
+
+        /* Spreadsheet Grid styling */
+        .table-container {
+            overflow-x: auto;
+            max-height: 400px;
+            background-color: var(--bg-color);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            background-color: var(--bg-color);
         }
 
         th, td {
             border: 1px solid var(--border-color);
-            padding: 0.5rem;
+            padding: 0.4rem;
             text-align: center;
+            min-width: 100px;
         }
 
         th {
             background-color: #111827;
             color: var(--text-muted);
+            position: sticky;
+            top: 0;
         }
 
         td input {
@@ -133,39 +176,100 @@
             color: var(--text-main);
             text-align: center;
             outline: none;
+            font-size: 14px;
         }
 
-        .slide-box {
+        /* PPT Slide Styles */
+        .ppt-layout {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .slide-thumbnails {
+            width: 150px;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            max-height: 350px;
+            overflow-y: auto;
+        }
+
+        .thumb {
+            background-color: #111827;
+            border: 1px solid var(--border-color);
+            padding: 0.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            text-align: center;
+            font-size: 0.8rem;
+        }
+
+        .thumb.active {
+            border-color: var(--accent-blue);
+            background-color: var(--border-color);
+        }
+
+        .slide-workspace {
+            flex: 1;
             background-color: var(--bg-color);
             border: 1px solid var(--border-color);
-            height: 250px;
             border-radius: 8px;
+            padding: 1.5rem;
             display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-            padding: 1rem;
-            text-align: center;
+            flex-direction: column;
+            gap: 1rem;
         }
 
-        /* Footer & Native Windows Download Area */
+        .slide-title-input {
+            font-size: 1.5rem;
+            font-weight: bold;
+            background: transparent;
+            border: none;
+            border-bottom: 2px solid var(--border-color);
+            color: var(--text-main);
+            outline: none;
+            padding-bottom: 0.3rem;
+            width: 100%;
+        }
+
+        .slide-body-input {
+            font-size: 1.1rem;
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            outline: none;
+            width: 100%;
+            height: 200px;
+            resize: none;
+        }
+
+        /* Action Buttons */
+        .action-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1rem;
+        }
+
+        .export-btn {
+            background-color: #10b981;
+            color: white;
+            border: none;
+            padding: 0.5rem 1.25rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .export-btn:hover {
+            background-color: #059669;
+        }
+
         footer {
             background-color: var(--card-bg);
             border-top: 1px solid var(--border-color);
             padding: 2rem;
             text-align: center;
-        }
-
-        .download-box h3 {
-            margin-top: 0;
-            font-size: 1.2rem;
-        }
-
-        .download-box p {
-            color: var(--text-muted);
-            font-size: 0.9rem;
-            margin-bottom: 1rem;
         }
 
         .download-btn {
@@ -181,7 +285,6 @@
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
-            transition: background 0.2s;
         }
 
         .download-btn:hover {
@@ -191,9 +294,8 @@
 </head>
 <body>
 
-    <!-- Header containing App Brand and Right Corner App Selectors -->
     <header>
-        <div class="logo">MicroOffice Pro 🌐</div>
+        <div class="logo">MicroOffice Pro Hub 🌐</div>
         <div class="nav-apps">
             <button class="app-btn active" onclick="switchApp('word', this)">Word</button>
             <button class="app-btn" onclick="switchApp('spreadsheet', this)">Spreadsheet</button>
@@ -201,72 +303,182 @@
         </div>
     </header>
 
-    <!-- Interactive Online Web Workspace -->
     <main>
         <div class="workspace-card">
-            <!-- Word Document Module -->
+            
+            <!-- 📝 WORD APPLICATION MODULE -->
             <div id="word" class="app-section active">
-                <h2>📝 MicroWord Web</h2>
-                <p style="color: var(--text-muted); margin-bottom: 1rem;">Type your document right here inside the web environment.</p>
-                <textarea placeholder="Start drafting your document here..."></textarea>
+                <h2>📝 MicroWord Web Pro</h2>
+                <div class="toolbar">
+                    <button class="tool-btn" onclick="formatText('bold')">B</button>
+                    <button class="tool-btn" onclick="formatText('italic')">I</button>
+                    <button class="tool-btn" onclick="formatText('underline')">U</button>
+                    <select onchange="formatText('fontSize', this.value)">
+                        <option value="3">Small</option>
+                        <option value="4" selected>Normal</option>
+                        <option value="5">Large</option>
+                        <option value="6">Extra Large</option>
+                    </select>
+                </div>
+                <div id="wordEditor" class="editor-box" contenteditable="true">Start writing your document here...</div>
+                <div class="action-container">
+                    <span>File Format: <strong>.doc</strong></span>
+                    <button class="export-btn" onclick="downloadDoc()">📥 Download Document</button>
+                </div>
             </div>
 
-            <!-- Spreadsheet Module -->
+            <!-- 📊 SPREADSHEET APPLICATION MODULE -->
             <div id="spreadsheet" class="app-section">
-                <h2>📊 MicroExcel Web</h2>
-                <p style="color: var(--text-muted); margin-bottom: 1rem;">A lightweight grid system for simple structural planning.</p>
-                <div style="overflow-x: auto;">
-                    <table>
-                        <tr><th></th><th>A</th><th>B</th><th>C</th><th>D</th></tr>
-                        <tr><th>1</th><td><input type="text" value="Item"></td><td><input type="text" value="Cost"></td><td><input type="text"></td><td><input type="text"></td></tr>
-                        <tr><th>2</th><td><input type="text" value="Apples"></td><td><input type="text" value="120"></td><td><input type="text"></td><td><input type="text"></td></tr>
-                        <tr><th>3</th><td><input type="text" value="Oranges"></td><td><input type="text" value="150"></td><td><input type="text"></td><td><input type="text"></td></tr>
-                        <tr><th>4</th><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
+                <h2>📊 MicroExcel Web Pro</h2>
+                <div class="toolbar">
+                    <button class="tool-btn" onclick="formatCell('bold')">B</button>
+                    <button class="tool-btn" onclick="formatCell('italic')">I</button>
+                    <button class="tool-btn" onclick="formatCell('underline')">U</button>
+                    <button class="tool-btn" onclick="addNewRow()" style="background-color: var(--accent-blue);">➕ Add New Row (More Cells)</button>
+                </div>
+                <div class="table-container">
+                    <table id="excelTable">
+                        <thead>
+                            <tr><th></th><th>A</th><th>B</th><th>C</th><th>D</th><th>E</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><th>1</th><td><input type="text" value="Product"></td><td><input type="text" value="Sales"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
+                            <tr><th>2</th><td><input type="text" value="MicroOffice"></td><td><input type="text" value="5000"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
+                        </tbody>
                     </table>
                 </div>
+                <div class="action-container">
+                    <span>File Format: <strong>.xls</strong></span>
+                    <button class="export-btn" onclick="downloadExcel()">📥 Download Spreadsheet</button>
+                </div>
             </div>
 
-            <!-- PowerPoint Module -->
+            <!-- 📉 POWERPOINT APPLICATION MODULE -->
             <div id="powerpoint" class="app-section">
-                <h2>📉 MicroPowerPoint Web</h2>
-                <p style="color: var(--text-muted); margin-bottom: 1rem;">Draft slides and structures directly through the ecosystem.</p>
-                <div class="slide-box" id="slideContainer">
-                    Slide 1: Welcome to MicroOffice Pro Web Suite
+                <h2>📉 MicroPowerPoint Web Pro</h2>
+                <div class="toolbar">
+                    <button class="tool-btn" onclick="formatSlideText('bold')">B</button>
+                    <button class="tool-btn" onclick="formatSlideText('italic')">I</button>
+                    <button class="tool-btn" onclick="formatSlideText('underline')">U</button>
+                    <button class="tool-btn" onclick="addNewSlide()" style="background-color: var(--accent-blue);">➕ Add New Slide</button>
                 </div>
-                <div style="display: flex; gap: 0.5rem;">
-                    <button class="app-btn" onclick="document.getElementById('slideContainer').innerText = 'Slide 1: Welcome to MicroOffice Pro Web Suite'">Slide 1</button>
-                    <button class="app-btn" onclick="document.getElementById('slideContainer').innerText = 'Slide 2: Completely ultra-lightweight architecture running everywhere.'">Slide 2</button>
+                <div class="ppt-layout">
+                    <div class="slide-thumbnails" id="slideThumbs">
+                        <div class="thumb active" onclick="loadSlide(0)" id="thumb-0">Slide 1</div>
+                    </div>
+                    <div class="slide-workspace">
+                        <input type="text" class="slide-title-input" id="slideTitle" value="Welcome to MicroOffice Pro" oninput="updateSlideData()">
+                        <textarea class="slide-body-input" id="slideBody" oninput="updateSlideData()">Type your presentation notes and slides contents right here.</textarea>
+                    </div>
+                </div>
+                <div class="action-container">
+                    <span>File Format: <strong>.ppt</strong></span>
+                    <button class="export-btn" onclick="downloadPPT()">📥 Download Presentation</button>
                 </div>
             </div>
+
         </div>
     </main>
 
-    <!-- Footer containing Windows App Distribution -->
     <footer>
-        <div class="download-box">
-            <h3>🖥️ Want to run it as a Dedicated Windows App?</h3>
-            <p>If you are on a Windows PC, grab the official offline package utilizing MSHTA architecture for high-efficiency processing.</p>
-            <!-- Replace the href below with your actual desktop app download file name if needed -->
-            <a href="MicroOfficePro.zip" class="download-btn">
-                📥 Download Desktop Windows App (.zip)
-            </a>
-        </div>
+        <h3>🖥️ Windows Application Suite Deployment</h3>
+        <p>Running a Windows ecosystem machine? Take your lightweight environment completely offline with deep native processing features.</p>
+        <a href="MicroOfficePro.zip" class="download-btn">📥 Download Desktop Windows App (.zip)</a>
     </footer>
 
-    <!-- Controller Script to Toggle Apps -->
     <script>
+        // Module Toggler Logic
         function switchApp(appId, element) {
-            // Hide all modules
-            const sections = document.querySelectorAll('.app-section');
-            sections.forEach(section => section.classList.remove('active'));
-            
-            // Deactivate all navigation buttons
-            const buttons = document.querySelectorAll('.app-btn');
-            buttons.forEach(btn => btn.classList.remove('active'));
-            
-            // Activate the chosen system module and active tab state
+            document.querySelectorAll('.app-section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-apps .app-btn').forEach(b => b.classList.remove('active'));
             document.getElementById(appId).classList.add('active');
             element.classList.add('active');
+        }
+
+        // ================= WORD CONTROLLER =================
+        function formatText(command, value = null) {
+            document.execCommand(command, false, value);
+        }
+        function downloadDoc() {
+            let data = document.getElementById('wordEditor').innerHTML;
+            let blob = new Blob(['<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40"><head><title>Document</title></head><body>' + data + '</body></html>'], {type: 'application/msword'});
+            saveFile(blob, 'Document.doc');
+        }
+
+        // ================= EXCEL CONTROLLER =================
+        let rowCount = 2;
+        function addNewRow() {
+            rowCount++;
+            let table = document.getElementById('excelTable').getElementsByTagName('tbody')[0];
+            let newRow = table.insertRow();
+            newRow.innerHTML = `<th>${rowCount}</th><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td>`;
+        }
+        function formatCell(style) {
+            let activeEl = document.activeElement;
+            if (activeEl && activeEl.tagName === 'INPUT') {
+                if (style === 'bold') activeEl.style.fontWeight = activeEl.style.fontWeight === 'bold' ? 'normal' : 'bold';
+                if (style === 'italic') activeEl.style.fontStyle = activeEl.style.fontStyle === 'italic' ? 'normal' : 'italic';
+                if (style === 'underline') activeEl.style.textDecoration = activeEl.style.textDecoration === 'underline' ? 'none' : 'underline';
+            }
+        }
+        function downloadExcel() {
+            let table = document.getElementById('excelTable').outerHTML;
+            let blob = new Blob(['<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head></head><body>' + table + '</body></html>'], {type: 'application/vnd.ms-excel'});
+            saveFile(blob, 'Spreadsheet.xls');
+        }
+
+        // ================= PPT CONTROLLER =================
+        let slides = [{title: "Welcome to MicroOffice Pro", body: "Type your presentation notes and slides contents right here."}];
+        let currentSlideIndex = 0;
+
+        function addNewSlide() {
+            slides.push({title: "New Slide Title", body: "Edit contents here."});
+            renderThumbnails();
+            loadSlide(slides.length - 1);
+        }
+        function renderThumbnails() {
+            let container = document.getElementById('slideThumbs');
+            container.innerHTML = '';
+            slides.forEach((slide, idx) => {
+                container.innerHTML += `<div class="thumb ${idx === currentSlideIndex ? 'active' : ''}" onclick="loadSlide(${idx})" id="thumb-${idx}">Slide ${idx + 1}</div>`;
+            });
+        }
+        function loadSlide(index) {
+            currentSlideIndex = index;
+            document.getElementById('slideTitle').value = slides[index].title;
+            document.getElementById('slideBody').value = slides[index].body;
+            renderThumbnails();
+        }
+        function updateSlideData() {
+            slides[currentSlideIndex].title = document.getElementById('slideTitle').value;
+            slides[currentSlideIndex].body = document.getElementById('slideBody').value;
+        }
+        function formatSlideText(style) {
+            let activeEl = document.activeElement;
+            if (activeEl && (activeEl.id === 'slideTitle' || activeEl.id === 'slideBody')) {
+                if (style === 'bold') activeEl.style.fontWeight = activeEl.style.fontWeight === 'bold' ? 'normal' : 'bold';
+                if (style === 'italic') activeEl.style.fontStyle = activeEl.style.fontStyle === 'italic' ? 'normal' : 'italic';
+                if (style === 'underline') activeEl.style.textDecoration = activeEl.style.textDecoration === 'underline' ? 'none' : 'underline';
+            }
+        }
+        function downloadPPT() {
+            let htmlData = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:p="urn:schemas-microsoft-com:office:powerpoint" xmlns="http://www.w3.org/TR/REC-html40"><head></head><body>';
+            slides.forEach((s, idx) => {
+                htmlData += `<div style="page-break-after:always; border:2px solid #334155; padding:40px; margin-bottom:20px;"><h1>${s.title}</h1><p>${s.body}</p></div>`;
+            });
+            htmlData += '</body></html>';
+            let blob = new Blob([htmlData], {type: 'application/vnd.ms-powerpoint'});
+            saveFile(blob, 'Presentation.ppt');
+        }
+
+        // Native Downloader Engine
+        function saveFile(blob, filename) {
+            let link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = filename;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
         }
     </script>
 </body>
