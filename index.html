@@ -3,86 +3,271 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <title>MicroOffice Pro - Super Light Office App for Windows</title>
-    <meta name="description" content="Download MicroOffice Pro, a super light office app suite for Windows. Includes quick spreadsheet, text, and presentation tools using lightweight HTA.">
-    <meta name="keywords" content="super light office app, lightweight office, microoffice pro, hta office app, tiny office windows">
-    <meta name="author" content="siddheshajaykanhere2007-wq">
-
+    <title>MicroOffice Pro - Online Suite & Desktop App</title>
     <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --accent-blue: #2563eb;
+            --accent-hover: #1d4ed8;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-color: #334155;
+        }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #0f172a;
-            color: #f8fafc;
+            background-color: var(--bg-color);
+            color: var(--text-main);
             margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Top Navigation Bar containing the Suite switchers */
+        header {
+            background-color: var(--card-bg);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: var(--text-main);
+        }
+
+        .nav-apps {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .app-btn {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .app-btn:hover, .app-btn.active {
+            background-color: var(--accent-blue);
+            color: var(--text-main);
+            border-color: var(--accent-blue);
+        }
+
+        /* Main Web App Workspace Workspace */
+        main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem;
+            max-width: 1000px;
+            width: 100%;
+            margin: 0 auto;
+            box-sizing: border-box;
+        }
+
+        .workspace-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            width: 100%;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            margin-bottom: 2rem;
+        }
+
+        .app-section {
+            display: none;
+        }
+
+        .app-section.active {
+            display: block;
+        }
+
+        /* Web Module Components Custom Styles */
+        textarea {
+            width: 100%;
+            height: 300px;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1rem;
+            box-sizing: border-box;
+            resize: none;
+            font-family: inherit;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: var(--bg-color);
+        }
+
+        th, td {
+            border: 1px solid var(--border-color);
+            padding: 0.5rem;
+            text-align: center;
+        }
+
+        th {
+            background-color: #111827;
+            color: var(--text-muted);
+        }
+
+        td input {
+            width: 100%;
+            background: transparent;
+            border: none;
+            color: var(--text-main);
+            text-align: center;
+            outline: none;
+        }
+
+        .slide-box {
+            background-color: var(--bg-color);
+            border: 1px solid var(--border-color);
+            height: 250px;
+            border-radius: 8px;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-        }
-        .container {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            padding: 1rem;
             text-align: center;
-            background-color: #1e293b;
-            padding: 3rem;
-            border-radius: 1rem;
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.3);
-            max-width: 500px;
-            width: 90%;
-            border: 1px solid #334155;
         }
-        h1 {
-            color: #3b82f6;
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
+
+        /* Footer & Native Windows Download Area */
+        footer {
+            background-color: var(--card-bg);
+            border-top: 1px solid var(--border-color);
+            padding: 2rem;
+            text-align: center;
         }
-        h2 {
-            font-size: 1.1rem;
-            color: #94a3b8;
-            font-weight: 400;
-            margin-bottom: 2rem;
-            line-height: 1.6;
+
+        .download-box h3 {
+            margin-top: 0;
+            font-size: 1.2rem;
         }
-        .btn {
+
+        .download-box p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .download-btn {
+            background-color: var(--accent-blue);
+            color: var(--text-main);
+            border: none;
+            padding: 0.75rem 1.75rem;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            text-decoration: none;
             display: inline-flex;
             align-items: center;
-            justify-content: center;
-            background-color: #2563eb;
-            color: white;
-            padding: 0.75rem 2rem;
-            font-size: 1.1rem;
-            font-weight: 600;
-            text-decoration: none;
-            border-radius: 0.5rem;
-            transition: background-color 0.2s, transform 0.1s;
-            box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.2);
+            gap: 0.5rem;
+            transition: background 0.2s;
         }
-        .btn:hover {
-            background-color: #1d4ed8;
-        }
-        .btn:active {
-            transform: scale(0.98);
-        }
-        .footer {
-            margin-top: 2.5rem;
-            font-size: 0.8rem;
-            color: #64748b;
+
+        .download-btn:hover {
+            background-color: var(--accent-hover);
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <h1>MicroOffice Pro</h1>
-        <h2>Get the ultimate super light office app suite for Windows. Includes Word Document Editor, Spreadsheet Engine, and Presentation Workspace.</h2>
-        
-        <a href="MicroOfficePro.zip" class="btn" download>
-            📩 Download Desktop App
-        </a>
-        
-        <div class="footer">
-            Compatible with Windows 7, 8, 10, and 11. Powered by MSHTA.
+    <!-- Header containing App Brand and Right Corner App Selectors -->
+    <header>
+        <div class="logo">MicroOffice Pro 🌐</div>
+        <div class="nav-apps">
+            <button class="app-btn active" onclick="switchApp('word', this)">Word</button>
+            <button class="app-btn" onclick="switchApp('spreadsheet', this)">Spreadsheet</button>
+            <button class="app-btn" onclick="switchApp('powerpoint', this)">PowerPoint</button>
         </div>
-    </div>
+    </header>
 
+    <!-- Interactive Online Web Workspace -->
+    <main>
+        <div class="workspace-card">
+            <!-- Word Document Module -->
+            <div id="word" class="app-section active">
+                <h2>📝 MicroWord Web</h2>
+                <p style="color: var(--text-muted); margin-bottom: 1rem;">Type your document right here inside the web environment.</p>
+                <textarea placeholder="Start drafting your document here..."></textarea>
+            </div>
+
+            <!-- Spreadsheet Module -->
+            <div id="spreadsheet" class="app-section">
+                <h2>📊 MicroExcel Web</h2>
+                <p style="color: var(--text-muted); margin-bottom: 1rem;">A lightweight grid system for simple structural planning.</p>
+                <div style="overflow-x: auto;">
+                    <table>
+                        <tr><th></th><th>A</th><th>B</th><th>C</th><th>D</th></tr>
+                        <tr><th>1</th><td><input type="text" value="Item"></td><td><input type="text" value="Cost"></td><td><input type="text"></td><td><input type="text"></td></tr>
+                        <tr><th>2</th><td><input type="text" value="Apples"></td><td><input type="text" value="120"></td><td><input type="text"></td><td><input type="text"></td></tr>
+                        <tr><th>3</th><td><input type="text" value="Oranges"></td><td><input type="text" value="150"></td><td><input type="text"></td><td><input type="text"></td></tr>
+                        <tr><th>4</th><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
+                    </table>
+                </div>
+            </div>
+
+            <!-- PowerPoint Module -->
+            <div id="powerpoint" class="app-section">
+                <h2>📉 MicroPowerPoint Web</h2>
+                <p style="color: var(--text-muted); margin-bottom: 1rem;">Draft slides and structures directly through the ecosystem.</p>
+                <div class="slide-box" id="slideContainer">
+                    Slide 1: Welcome to MicroOffice Pro Web Suite
+                </div>
+                <div style="display: flex; gap: 0.5rem;">
+                    <button class="app-btn" onclick="document.getElementById('slideContainer').innerText = 'Slide 1: Welcome to MicroOffice Pro Web Suite'">Slide 1</button>
+                    <button class="app-btn" onclick="document.getElementById('slideContainer').innerText = 'Slide 2: Completely ultra-lightweight architecture running everywhere.'">Slide 2</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer containing Windows App Distribution -->
+    <footer>
+        <div class="download-box">
+            <h3>🖥️ Want to run it as a Dedicated Windows App?</h3>
+            <p>If you are on a Windows PC, grab the official offline package utilizing MSHTA architecture for high-efficiency processing.</p>
+            <!-- Replace the href below with your actual desktop app download file name if needed -->
+            <a href="MicroOfficePro.zip" class="download-btn">
+                📥 Download Desktop Windows App (.zip)
+            </a>
+        </div>
+    </footer>
+
+    <!-- Controller Script to Toggle Apps -->
+    <script>
+        function switchApp(appId, element) {
+            // Hide all modules
+            const sections = document.querySelectorAll('.app-section');
+            sections.forEach(section => section.classList.remove('active'));
+            
+            // Deactivate all navigation buttons
+            const buttons = document.querySelectorAll('.app-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            
+            // Activate the chosen system module and active tab state
+            document.getElementById(appId).classList.add('active');
+            element.classList.add('active');
+        }
+    </script>
 </body>
 </html>
