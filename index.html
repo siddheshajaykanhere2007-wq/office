@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Micro Office Pro</title>
+    <title>Office Suite Workspace</title>
     <style>
         * { box-sizing: border-box; font-family: "Segoe UI", Arial, sans-serif; }
         body, html { margin: 0; padding: 0; width: 100%; height: 100%; background-color: #f3f2f1; color: #323130; overflow: hidden; }
 
         /* ================= OFFICE APP MASTER HEADER NAVIGATION ================= */
         .office-app-bar {
-            background-color: #107c41; /* Classic Productivity Green Theme */
+            background-color: #107c41;
             color: white; height: 50px; display: flex; align-items: center; 
             padding: 0 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.15); position: relative; z-index: 100;
         }
@@ -38,20 +38,24 @@
         .office-select { padding: 5px; font-size: 12px; border: 1px solid #d2d0ce; border-radius: 3px; background: white; color: #323130; outline: none; }
         .office-select:focus { border-color: #107c41; }
 
-        /* ================= DEPLOYED WORKPAD CONTAINER SYSTEM ================= */
+        /* ================= WORDPAD WINDOW ELEMENTS ================= */
         .wordpad-content-wrapper { flex: 1; background: #f3f2f1; padding: 30px; display: flex; justify-content: center; overflow-y: auto; }
         .wordpad-page-canvas { width: 100%; max-width: 800px; background: white; min-height: 1000px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); padding: 50px; outline: none; }
-        .wordpad-header-zone { border-bottom: 2px solid #e0e0e0; padding-bottom: 8px; margin-bottom: 25px; font-size: 22px; font-weight: 700; color: #201f1e; text-align: left; }
+        .wordpad-header-zone { border-bottom: 2px solid #e0e0e0; padding-bottom: 8px; margin-bottom: 25px; font-size: 22px; font-weight: 700; color: #201f1e; text-align: left; outline: none; }
 
-        /* ================= DEPLOYED POWERPOINT RUNTIME STUDIO ================= */
+        /* ================= POWERPOINT WORKSPACE LAYOUTS ================= */
         .ppt-content-wrapper { flex: 1; background: #eaeaea; padding: 30px; display: flex; justify-content: center; align-items: center; overflow: auto; }
-        .ppt-slide-canvas { width: 100%; max-width: 640px; aspect-ratio: 4/3; background: white; box-shadow: 0 6px 20px rgba(0,0,0,0.12); padding: 40px; display: flex; flex-direction: column; position: relative; }
-        .ppt-header-box { font-size: 32px; font-weight: 700; text-align: center; margin-bottom: 25px; outline: none; border: 1px dashed transparent; color: #201f1e; }
+        .ppt-slide-canvas { width: 100%; max-width: 680px; min-height: 480px; background: white; box-shadow: 0 6px 20px rgba(0,0,0,0.12); padding: 40px; display: flex; flex-direction: column; position: relative; gap: 15px; }
+        .ppt-header-box { font-size: 32px; font-weight: 700; text-align: center; outline: none; border: 1px dashed transparent; color: #201f1e; padding: 5px; }
         .ppt-header-box:focus { border-color: #107c41; background: #fafafa; }
-        .ppt-img-container { width: 100%; flex: 1; border: 2px dashed #d2d0ce; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; background: #fbfbfb; border-radius: 4px; }
+        
+        .ppt-body-text-box { font-size: 16px; color: #323130; line-height: 1.5; min-height: 80px; outline: none; border: 1px dashed transparent; padding: 10px; background: #fdfdfd; }
+        .ppt-body-text-box:focus { border-color: #107c41; background: #fff; }
+
+        .ppt-img-container { width: 100%; flex: 1; border: 2px dashed #d2d0ce; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; background: #fbfbfb; border-radius: 4px; min-height: 180px; }
         .ppt-slide-img { max-width: 100%; max-height: 100%; object-fit: contain; position: absolute; }
 
-        /* ================= DEPLOYED EXCEL WORKSHEET ENGINE ================= */
+        /* ================= EXCEL SPREADSHEET STRUCTS ================= */
         .excel-scroll-zone { flex: 1; overflow: auto; background: #fff; border-bottom: 1px solid #e0e0e0; }
         .excel-table { border-collapse: collapse; table-layout: fixed; background: white; }
         .excel-table th { background: #f3f2f1; border: 1px solid #d2d0ce; font-size: 11px; font-weight: 600; text-align: center; height: 26px; color: #323130; }
@@ -113,6 +117,7 @@
                 
                 <span style="flex:1;"></span>
                 
+                <button class="office-btn" style="background:#f0f4ff; border-color:#cbd2e7; font-weight:bold; color:#004b9a;" onclick="saveAsWordDocFile()">💾 Save as .doc</button>
                 <button class="office-btn" style="background:#fff0f0; border-color:#f1c4c4; font-weight:bold; color:#a80000;" onclick="triggerWordpadPDFGeneration()">💾 Export to .pdf</button>
             </div>
             <div class="wordpad-content-wrapper">
@@ -131,12 +136,19 @@
                 
                 <span style="border-left:1px solid #d2d0ce; height:20px; margin:0 4px;"></span>
                 
-                <button class="office-btn" style="background:#f3f9f5; border-color:#badbbf;" onclick="document.getElementById('ppt-image-injector').click()">Insert Slide Graphic Image</button>
+                <button class="office-btn" style="background:#f3f9f5; border-color:#badbbf;" onclick="document.getElementById('ppt-image-injector').click()">🖼️ Insert Slide Image</button>
                 <input type="file" id="ppt-image-injector" accept="image/*" style="display:none;" onchange="streamImageToPPTSlide(event)">
+                
+                <span style="flex:1;"></span>
+                
+                <button class="office-btn" style="background:#fff4eb; border-color:#fad1b2; font-weight:bold; color:#b83b00;" onclick="saveAsPowerPointFile()">💾 Save as .ppt</button>
             </div>
             <div class="ppt-content-wrapper">
                 <div class="ppt-slide-canvas" id="ppt-viewport-layer">
                     <div class="ppt-header-box" contenteditable="true" id="ppt-heading-box-element">Slide Header Deck Title</div>
+                    
+                    <div class="ppt-body-text-box" contenteditable="true" id="ppt-body-text-element">Click to Add Slide Text Content Paragraphs...</div>
+                    
                     <div class="ppt-img-container" id="ppt-canvas-media-bucket">
                         <span style="color:#a19f9d; font-size:13px;" id="ppt-fallback-label">No canvas image uploaded</span>
                     </div>
@@ -147,11 +159,13 @@
         <div id="view-excel" class="office-app-view">
             <div class="office-ribbon">
                 <button class="office-btn" style="font-weight:600; background:#e2f6ea; border-color:#badbbf; color:#107c41;" onclick="executeSpreadsheetAutoSum()">🧮 Compute AutoSum (Row 1)</button>
-                <span style="border-left:1px solid #d2d0ce; height:20px; margin:0 4px;"></span>
                 <button class="office-btn" onclick="alterExcelGridDimensions(35)">➕ Enlarge Cells Size</button>
                 <button class="office-btn" onclick="alterExcelGridDimensions(-35)">➖ Compress Cells Size</button>
-                <span style="flex:1;"></span>
                 <button class="office-btn" onclick="recalculateExcelPieChartGraphic()">📊 Redraw Data Pie Chart</button>
+                
+                <span style="flex:1;"></span>
+                
+                <button class="office-btn" style="background:#eaf8f0; border-color:#bce7cd; font-weight:bold; color:#107c41;" onclick="saveAsExcelFile()">💾 Save as .exl</button>
             </div>
             <div class="excel-scroll-zone">
                 <table class="excel-table" id="excel-data-matrix">
@@ -199,18 +213,28 @@
     </div>
 
     <script>
-        // ================= GLOBAL ROUTER TAB MECHANICS NAVIGATION LAYER =================
+        // NAVIGATION SYSTEM MODULE MANAGER TABS
         function switchActiveOfficeModule(targetModuleId) {
-            // Drop current focus tabs active CSS wrappers
             document.querySelectorAll('.office-tab').forEach(btn => btn.classList.remove('active-tab'));
             document.querySelectorAll('.office-app-view').forEach(view => view.classList.remove('active-view'));
 
-            // Set layout maps active contexts updates
             document.getElementById('tab-' + targetModuleId).classList.add('active-tab');
             document.getElementById('view-' + targetModuleId).classList.add('active-view');
         }
 
-        // ================= WORDPAD RENDERING LAYER ENGINE CONTROLLERS =================
+        // UNIVERSAL CLIENT-SIDE DOWN-STREAM FILE BLOB DOWNLOAD CONSTRUCTOR ENGINE
+        function triggerClientSideFileDownload(fileNameStr, contentPayloadText, mimeTypeString) {
+            var contentBlobContainerElement = new Blob([contentPayloadText], { type: mimeTypeString });
+            var surrogateAnchorDownloadLinkDomNode = document.createElement("a");
+            surrogateAnchorDownloadLinkDomNode.download = fileNameStr;
+            surrogateAnchorDownloadLinkDomNode.href = window.URL.createObjectURL(contentBlobContainerElement);
+            surrogateAnchorDownloadLinkDomNode.style.display = "none";
+            document.body.appendChild(surrogateAnchorDownloadLinkDomNode);
+            surrogateAnchorDownloadLinkDomNode.click();
+            surrogateAnchorDownloadLinkDomNode.remove();
+        }
+
+        // ================= WORDPAD RENDERING CONTROLLERS =================
         function applyWordpadStyles() {
             var selectedSize = document.getElementById('wp-font-size').value;
             var selectedFamily = document.getElementById('wp-font-family').value;
@@ -222,6 +246,11 @@
 
         function alignWordpadHeaderSection(alignmentPosition) {
             document.getElementById('wp-header-block').style.textAlign = alignmentPosition;
+        }
+
+        function saveAsWordDocFile() {
+            var documentWorkspaceContentText = document.getElementById('wordpad-editor-area').innerText;
+            triggerClientSideFileDownload("document.doc", documentWorkspaceContentText, "text/plain;charset=utf-8");
         }
 
         function triggerWordpadPDFGeneration() {
@@ -239,7 +268,7 @@
             pdfPrintProxyWindow.print();
         }
 
-        // ================= POWERPOINT CORE DESIGN LOGIC GRAPHICS PIPELINE =================
+        // ================= POWERPOINT WORKSPACE LOGIC =================
         function alignPowerPointHeader(alignmentPosition) {
             document.getElementById('ppt-heading-box-element').style.textAlign = alignmentPosition;
         }
@@ -265,7 +294,15 @@
             }
         }
 
-        // ================= EXCEL CELLS EQUATION CALCULATOR TRACKER PROCESSORS =================
+        function saveAsPowerPointFile() {
+            var titleTextDataContent = document.getElementById('ppt-heading-box-element').innerText;
+            var bodyTextDataContent = document.getElementById('ppt-body-text-element').innerText;
+            var unifiedPresentationLayoutDataTextPayloadOutput = "SLIDE TITLE:\n" + titleTextDataContent + "\n\nSLIDE BODY TEXT:\n" + bodyTextDataContent;
+            
+            triggerClientSideFileDownload("presentation.ppt", unifiedPresentationLayoutDataTextPayloadOutput, "text/plain;charset=utf-8");
+        }
+
+        // ================= EXCEL GRID ENGINE PROCESSORS =================
         function executeSpreadsheetAutoSum() {
             var a1NumericDataValue = parseFloat(document.getElementById('cell-a1').value) || 0;
             var b1NumericDataValue = parseFloat(document.getElementById('cell-b1').value) || 0;
@@ -312,6 +349,17 @@
 
             var graphicPieDomNodeTarget = document.getElementById('excel-render-chart');
             graphicPieDomNodeTarget.style.background = "conic-gradient(#0078d4 0deg " + radialDegreeScaleBoundaryValueA + "deg, #d83b01 " + radialDegreeScaleBoundaryValueA + "deg " + radialDegreeScaleBoundaryValueB + "deg, #ffb900 " + radialDegreeScaleBoundaryValueB + "deg 360deg)";
+        }
+
+        function saveAsExcelFile() {
+            var spreadsheetRowDataValueA = document.getElementById('cell-a1').value;
+            var spreadsheetRowDataValueB = document.getElementById('cell-b1').value;
+            var spreadsheetRowDataValueC = document.getElementById('cell-c1').value;
+            var spreadsheetCalculatedSumStringValueValue = document.getElementById('cell-d1-sum').value;
+            
+            var generatedExcelDataPlainPayloadContentStructureString = "Cell A1, Cell B1, Cell C1, AutoSum Result\n" + spreadsheetRowDataValueA + ", " + spreadsheetRowDataValueB + ", " + spreadsheetRowDataValueC + ", " + spreadsheetCalculatedSumStringValueValue;
+            
+            triggerClientSideFileDownload("sheet.exl", generatedExcelDataPlainPayloadContentStructureString, "text/plain;charset=utf-8");
         }
     </script>
 </body>
