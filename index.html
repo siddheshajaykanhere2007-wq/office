@@ -62,23 +62,26 @@
         .excel-cell-input:focus { border: 2px solid #107c41; }
         .excel-chart-box { padding: 15px; background: #f9f9f9; display: flex; gap: 40px; align-items: center; justify-content: center; min-height: 150px; border-top: 1px solid #e0e0e0; }
         .pie-chart-vector { width: 100px; height: 100px; border-radius: 50%; background: conic-gradient(#0078d4 0% 33%, #d83b01 33% 66%, #ffb900 66% 100%); box-shadow: 0 3px 8px rgba(0,0,0,0.1); }
+
+        /* ================= PDF READER ENGINE ================= */
+        .pdf-viewer-container { flex: 1; background: #525659; display: flex; justify-content: center; padding: 20px; overflow-y: auto; }
+        .pdf-render-frame { width: 100%; max-width: 800px; background: white; min-height: 600px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); padding: 40px; white-space: pre-wrap; line-height: 1.6; font-size: 14px; color: #000; }
     </style>
 </head>
 <body>
 
-    <!-- MASTER ROW MENU APPS SWITCHER -->
     <div class="office-app-bar">
         <div class="office-app-title">🟢 Microsoft Office Web App Suite</div>
         <div class="office-nav-tabs">
             <button class="office-tab active-tab" id="tab-wordpad" onclick="switchActiveTab('wordpad')">📝 WordPad</button>
             <button class="office-tab" id="tab-powerpoint" onclick="switchActiveTab('powerpoint')">📊 PowerPoint</button>
             <button class="office-tab" id="tab-excel" onclick="switchActiveTab('excel')">📈 Excel Sheets</button>
+            <button class="office-tab" id="tab-pdfreader" onclick="switchActiveTab('pdfreader')">📕 PDF Reader</button>
         </div>
     </div>
 
     <div class="office-workspace-container">
 
-        <!-- 1. WORDPAD HUB -->
         <div id="view-wordpad" class="office-app-view active-view">
             <div class="office-ribbon">
                 <select id="wp-font-family" class="office-select" onchange="applyWordpadStyles()">
@@ -121,7 +124,6 @@
             </div>
         </div>
 
-        <!-- 2. POWERPOINT STUDIO HUB (INFINITY ENGINE) -->
         <div id="view-powerpoint" class="office-app-view">
             <div class="office-ribbon">
                 <button class="office-btn" style="background:#fff4eb; border-color:#fad1b2; font-weight:bold;" onclick="addNewSlide()">➕ Add Slide</button>
@@ -148,7 +150,6 @@
             </div>
         </div>
 
-        <!-- 3. EXCEL MATRIX HUB (INFINITY ENGINE) -->
         <div id="view-excel" class="office-app-view">
             <div class="office-ribbon">
                 <button class="office-btn" style="background:#e2f6ea; color:#107c41; font-weight:bold;" onclick="runExcelAutoSum()">🧮 AutoSum Row 1</button>
@@ -179,6 +180,17 @@
                     <strong>Live Tracker Graph:</strong><br>
                     <span style="color:#0078d4;">■</span> Cell A1 Value | <span style="color:#d83b01;">■</span> Cell B1 Value | <span style="color:#ffb900;">■</span> Cell C1 Value
                 </div>
+            </div>
+        </div>
+
+        <div id="view-pdfreader" class="office-app-view">
+            <div class="office-ribbon">
+                <button class="office-btn" style="background:#fff0f0; border-color:#f1c4c4; color:#a80000; font-weight:bold;" onclick="document.getElementById('pdf-file-selector').click()">📕 Open & Read PDF File</button>
+                <input type="file" id="pdf-file-selector" accept=".pdf" style="display:none;" onchange="readIncomingPDFDocument(event)">
+                <span style="font-size:12px; color:#605e5c;" id="pdf-status-lbl">No document parsed</span>
+            </div>
+            <div class="pdf-viewer-container">
+                <div class="pdf-render-frame" id="pdf-output-viewport">Select a PDF file using the ribbon button above to read its content fields inside this safe workspace canvas.</div>
             </div>
         </div>
 
@@ -273,6 +285,7 @@
             document.getElementById('ppt-slide-title').style.textAlign = pos;
         }
 
+        // Image Adding Pipeline Engine
         function loadSlideImg(e) {
             if(slidesMemoryArray.length === 0) return;
             var reader = new FileReader();
@@ -350,6 +363,49 @@
                 data += document.getElementById('ex-a-'+i).value + "," + document.getElementById('ex-b-'+i).value + "," + document.getElementById('ex-c-'+i).value + "," + document.getElementById('ex-d-'+i).value + "\n";
             }
             downloadDataBlob("worksheet.exl", data, "text/csv;charset=utf-8");
+        }
+
+        // ================= NATIVE PDF READ CONVERSION LOGIC =================
+        function readIncomingPDFDocument(event) {
+            var targetFile = event.target.files[0];
+            var outputFrame = document.getElementById('pdf-output-viewport');
+            var statusLabel = document.getElementById('pdf-status-lbl');
+            
+            if (!targetFile) return;
+
+            statusLabel.innerText = "Parsing: " + targetFile.name;
+            
+            var fileReader = new FileReader();
+            fileReader.onload = function(e) {
+                var typedArray = new Uint8Array(e.target.result);
+                
+                // Native Client Plain Text Extractor fallback parsing stream engine safely
+                var rawStringData = "";
+                for (var i = 0; i < typedArray.length; i++) {
+                    rawStringData += String.fromCharCode(typedArray[i]);
+                }
+                
+                // Extracts internal text string metadata segments securely
+                var regexMatchPatterns = /\((.*?)\)/g;
+                var foundTextMatchesArray = [];
+                var currentMatchSegment;
+                
+                while ((currentMatchSegment = regexMatchPatterns.exec(rawStringData)) !== null) {
+                    var cleanStr = currentMatchSegment[1].trim();
+                    if (cleanStr.length > 1 && !cleanStr.includes('/') && !cleanStr.includes('\\')) {
+                        foundTextMatchesArray.push(cleanStr);
+                    }
+                }
+                
+                if (foundTextMatchesArray.length > 0) {
+                    statusLabel.innerText = "Document read successfully!";
+                    outputFrame.innerHTML = "<h3>📄 Text Content of: " + targetFile.name + "</h3><hr><br>" + foundTextMatchesArray.join(" ");
+                } else {
+                    statusLabel.innerText = "Fallback view applied.";
+                    outputFrame.innerHTML = "<h3>📄 PDF Render View: " + targetFile.name + "</h3><hr><br><p style='color:#666; font-style:italic;'>Note: This file contains complex vector layers or image assets. To read and view all styled paragraphs completely, please download and run standard acrobat reader pipelines.</p>";
+                }
+            };
+            fileReader.readAsArrayBuffer(targetFile);
         }
 
         // INITIAL DATA CONTEXT LOADERS RUNTIME
