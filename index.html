@@ -2,568 +2,359 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Office Suite Workspace</title>
+    <title>Office Suite Workspace Pro</title>
     <style>
-        :root {
-            --primary-green: #107c41;
-            --dark-green: #0b592e;
-            --bg-light: #eaeaea;
-            --card-bg: #ffffff;
-            --border-color: #d1d1d1;
-        }
+        * { box-sizing: border-box; font-family: "Segoe UI", Arial, sans-serif; }
+        body, html { margin: 0; padding: 0; width: 100%; height: 100%; background-color: #f3f2f1; color: #323130; overflow: hidden; }
 
-        body {
-            margin: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-light);
-            color: #333;
+        /* ================= NAVIGATION CONTROLS ================= */
+        .office-app-bar {
+            background-color: #107c41;
+            color: white; height: 50px; display: flex; align-items: center; 
+            padding: 0 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.15); position: relative; z-index: 100;
         }
+        .office-app-title { font-size: 18px; font-weight: 600; margin-right: 40px; display: flex; align-items: center; gap: 8px; }
+        .office-nav-tabs { display: flex; gap: 5px; height: 100%; align-items: flex-end; }
+        .office-tab {
+            padding: 8px 20px; background: rgba(255,255,255,0.15); border: none; border-radius: 4px 4px 0 0;
+            color: white; font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.2s;
+        }
+        .office-tab:hover { background: rgba(255,255,255,0.25); }
+        .office-tab.active-tab { background: white; color: #107c41; font-weight: 600; box-shadow: 0 -2px 5px rgba(0,0,0,0.05); }
 
-        /* Top Navigation Bar */
-        .navbar {
-            background-color: var(--primary-green);
-            display: flex;
-            align-items: center;
-            padding: 0 20px;
-            height: 50px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
+        /* ================= WORKSPACE INTERFACES ================= */
+        .office-workspace-container { width: 100%; height: calc(100% - 50px); position: relative; background: #fff; }
+        .office-app-view { display: none; width: 100%; height: 100%; flex-direction: column; }
+        .office-app-view.active-view { display: flex; }
+        
+        .office-ribbon { background: #f9f9f9; border-bottom: 1px solid #e0e0e0; padding: 10px 20px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+        .office-btn { padding: 6px 12px; font-size: 12px; background: #fff; border: 1px solid #d2d0ce; border-radius: 3px; cursor: pointer; display: flex; align-items: center; gap: 4px; font-weight: 500; color: #323130; }
+        .office-btn:hover { background: #f3f2f1; border-color: #a19f9d; }
+        .office-select { padding: 5px; font-size: 12px; border: 1px solid #d2d0ce; border-radius: 3px; background: white; color: #323130; outline: none; }
 
-        .brand {
-            color: white;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-right: 30px;
-            font-size: 16px;
-        }
+        /* ================= WORDPAD STRUCTURES ================= */
+        .wordpad-content-wrapper { flex: 1; background: #f3f2f1; padding: 20px; display: flex; justify-content: center; overflow-y: auto; }
+        .wordpad-page-canvas { width: 100%; max-width: 800px; background: white; min-height: 800px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); padding: 50px; outline: none; }
+        .wordpad-header-zone { border-bottom: 2px solid #e0e0e0; padding-bottom: 8px; margin-bottom: 25px; font-size: 22px; font-weight: 700; color: #201f1e; outline: none; }
 
-        .brand-dot {
-            width: 12px;
-            height: 12px;
-            background-color: #2ecc71;
-            border-radius: 50%;
-            display: inline-block;
-        }
+        /* ================= INFINITE POWERPOINT ENGINE ================= */
+        .ppt-layout-body { flex: 1; display: flex; overflow: hidden; background: #eaeaea; }
+        .ppt-sidebar { width: 160px; background: #f3f2f1; border-right: 1px solid #d2d0ce; display: flex; flex-direction: column; padding: 10px; gap: 10px; overflow-y: auto; }
+        .ppt-thumb { width: 100%; aspect-ratio: 4/3; background: white; border: 2px solid #d2d0ce; border-radius: 4px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: bold; color: #605e5c; text-align: center; padding: 5px; }
+        .ppt-thumb.active-thumb { border-color: #b83b00; background: #fff4eb; color: #b83b00; }
+        .ppt-content-wrapper { flex: 1; padding: 30px; display: flex; justify-content: center; align-items: center; overflow: auto; }
+        .ppt-slide-canvas { width: 100%; max-width: 640px; min-height: 440px; background: white; box-shadow: 0 6px 20px rgba(0,0,0,0.12); padding: 40px; display: flex; flex-direction: column; gap: 15px; }
+        .ppt-header-box { font-size: 32px; font-weight: 700; text-align: center; outline: none; border: 1px dashed transparent; color: #201f1e; }
+        .ppt-header-box:focus { border-color: #b83b00; background: #fafafa; }
+        .ppt-body-text-box { font-size: 16px; color: #323130; line-height: 1.5; min-height: 80px; outline: none; border: 1px dashed transparent; padding: 10px; background: #fdfdfd; }
+        .ppt-body-text-box:focus { border-color: #b83b00; background: #fff; }
+        .ppt-img-container { width: 100%; flex: 1; border: 2px dashed #d2d0ce; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; background: #fbfbfb; min-height: 150px; }
+        .ppt-slide-img { max-width: 100%; max-height: 100%; object-fit: contain; }
 
-        /* Tabs System */
-        .tabs-container {
-            display: flex;
-            align-items: flex-end;
-            height: 100%;
-        }
-
-        .tab {
-            padding: 8px 16px;
-            color: white;
-            background-color: var(--dark-green);
-            border: 1px solid transparent;
-            border-bottom: none;
-            border-radius: 4px 4px 0 0;
-            cursor: pointer;
-            margin-right: 5px;
-            font-size: 14px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            transition: background 0.2s;
-        }
-
-        .tab:hover {
-            background-color: #138c4a;
-        }
-
-        .tab.active {
-            background-color: var(--card-bg);
-            color: var(--primary-green);
-            font-weight: 600;
-            border-color: var(--border-color);
-        }
-
-        /* Toolbar Component */
-        .toolbar {
-            background-color: #f3f2f1;
-            padding: 10px 20px;
-            border-bottom: 1px solid var(--border-color);
-            display: none;
-            gap: 10px;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-
-        .toolbar.active {
-            display: flex;
-        }
-
-        .btn {
-            background-color: white;
-            border: 1px solid var(--border-color);
-            padding: 6px 12px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 13px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .btn:hover {
-            background-color: #f3f2f1;
-        }
-
-        .btn-save {
-            margin-left: auto;
-            color: #a4262c;
-            border-color: #a4262c;
-            font-weight: 600;
-        }
-
-        /* Workspace Panels */
-        .workspace-container {
-            padding: 40px 20px;
-            display: flex;
-            justify-content: center;
-        }
-
-        .panel {
-            background-color: var(--card-bg);
-            width: 100%;
-            max-width: 900px;
-            min-height: 500px;
-            border-radius: 4px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-            padding: 40px;
-            box-sizing: border-box;
-            display: none;
-        }
-
-        .panel.active {
-            display: block;
-        }
-
-        /* --- PowerPoint specific styles --- */
-        .slide-content-wrapper {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-        }
-
-        .slide-title {
-            font-size: 36px;
-            font-weight: 700;
-            margin-bottom: 20px;
-            width: 100%;
-            border: none;
-            outline: none;
-            text-align: center;
-        }
-
-        .slide-body {
-            font-size: 18px;
-            color: #666;
-            margin-bottom: 30px;
-            width: 100%;
-            border: none;
-            outline: none;
-            text-align: center;
-            resize: none;
-        }
-
-        .image-placeholder {
-            border: 2px dashed var(--border-color);
-            width: 100%;
-            max-width: 600px;
-            height: 300px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #999;
-            background-color: #fafafa;
-            border-radius: 4px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .image-placeholder img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-        }
-
-        .slide-counter {
-            font-size: 14px;
-            font-weight: 600;
-            color: #555;
-            margin-right: 10px;
-        }
-
-        /* --- WordPad specific styles --- */
-        .wordpad-textarea {
-            width: 100%;
-            height: 400px;
-            border: none;
-            outline: none;
-            resize: none;
-            font-size: 16px;
-            line-height: 1.6;
-        }
-
-        /* --- Excel specific styles --- */
-        .excel-table-wrapper {
-            overflow-x: auto;
-            max-width: 100%;
-            max-height: 500px;
-        }
-
-        .excel-table {
-            border-collapse: collapse;
-            width: 100%;
-        }
-
-        .excel-table th, .excel-table td {
-            border: 1px solid var(--border-color);
-            padding: 6px;
-            min-width: 80px;
-            text-align: left;
-        }
-
-        .excel-table th {
-            background-color: #f3f2f1;
-            font-weight: 600;
-            text-align: center;
-            user-select: none;
-        }
-
-        .excel-table td input {
-            width: 100%;
-            border: none;
-            outline: none;
-            background: transparent;
-            font-size: 13px;
-        }
-
-        /* --- PDF Viewer specific styles --- */
-        .pdf-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 20px;
-            height: 100%;
-        }
-
-        .pdf-frame {
-            width: 100%;
-            height: 600px;
-            border: 1px solid var(--border-color);
-            border-radius: 4px;
-            display: none;
-        }
-
-        .pdf-upload-box {
-            border: 2px dashed var(--primary-green);
-            padding: 40px;
-            border-radius: 8px;
-            text-align: center;
-            background-color: #f9fbf9;
-            cursor: pointer;
-            width: 80%;
-            max-width: 500px;
-            margin-top: 50px;
-        }
-
-        .pdf-upload-box:hover {
-            background-color: #f0f7f2;
-        }
-
-        .hidden-file-input {
-            display: none;
-        }
+        /* ================= INFINITE EXCEL ENGINE ================= */
+        .excel-scroll-zone { flex: 1; overflow: auto; background: #fff; }
+        .excel-table { border-collapse: collapse; background: white; table-layout: fixed; }
+        .excel-table th { background: #f3f2f1; border: 1px solid #d2d0ce; font-size: 11px; font-weight: 600; text-align: center; height: 26px; color: #323130; }
+        .excel-table td { border: 1px solid #e0e0e0; padding: 0; }
+        .excel-cell-input { width: 100%; height: 100%; border: none; outline: none; font-size: 13px; padding: 6px; }
+        .excel-cell-input:focus { border: 2px solid #107c41; }
+        .excel-chart-box { padding: 15px; background: #f9f9f9; display: flex; gap: 40px; align-items: center; justify-content: center; min-height: 150px; border-top: 1px solid #e0e0e0; }
+        .pie-chart-vector { width: 100px; height: 100px; border-radius: 50%; background: conic-gradient(#0078d4 0% 33%, #d83b01 33% 66%, #ffb900 66% 100%); box-shadow: 0 3px 8px rgba(0,0,0,0.1); }
     </style>
 </head>
 <body>
 
-    <div class="navbar">
-        <div class="brand">
-            <span class="brand-dot"></span> Microsoft Office Web App
-        </div>
-        <div class="tabs-container">
-            <div class="tab" onclick="switchTab('wordpad')">📝 WordPad Document</div>
-            <div class="tab active" onclick="switchTab('powerpoint')">📊 PowerPoint Slide</div>
-            <div class="tab" onclick="switchTab('excel')">📈 Excel Spreadsheet</div>
-            <div class="tab" onclick="switchTab('pdfviewer')">📕 PDF Viewer</div>
+    <!-- MASTER ROW MENU APPS SWITCHER -->
+    <div class="office-app-bar">
+        <div class="office-app-title">🟢 Microsoft Office Web App Suite</div>
+        <div class="office-nav-tabs">
+            <button class="office-tab active-tab" id="tab-wordpad" onclick="switchActiveTab('wordpad')">📝 WordPad</button>
+            <button class="office-tab" id="tab-powerpoint" onclick="switchActiveTab('powerpoint')">📊 PowerPoint</button>
+            <button class="office-tab" id="tab-excel" onclick="switchActiveTab('excel')">📈 Excel Sheets</button>
         </div>
     </div>
 
-    <div id="toolbar-wordpad" class="toolbar">
-        <button class="btn">📄 New Document</button>
-        <button class="btn">💾 Save Document</button>
-    </div>
+    <div class="office-workspace-container">
 
-    <div id="toolbar-powerpoint" class="toolbar active">
-        <button class="btn" onclick="setSlideAlignment('left')">⬅️ Left Header</button>
-        <button class="btn" onclick="setSlideAlignment('center')">🔼 Center Header</button>
-        <button class="btn" onclick="setSlideAlignment('right')">➡️ Right Header</button>
-        <button class="btn" onclick="triggerSlideImageUpload()">🖼️ Insert Slide Image</button>
-        <input type="file" id="slide-img-input" class="hidden-file-input" accept="image/*" onchange="loadSlideImage(event)">
-        
-        <span style="border-left: 1px solid var(--border-color); margin: 0 10px; height: 20px;"></span>
-        
-        <button class="btn" onclick="createNewSlide()">➕ Add Slide</button>
-        <button class="btn" onclick="navigateSlide(-1)">◀️ Prev</button>
-        <span class="slide-counter" id="slide-indicator">Slide 1 of 1</span>
-        <button class="btn" onclick="navigateSlide(1)">Next ▶️</button>
-        <button class="btn" onclick="deleteCurrentSlide()" style="color: #a4262c;">🗑️ Delete Slide</button>
-
-        <button class="btn btn-save">💾 Save as .ppt</button>
-    </div>
-
-    <div id="toolbar-excel" class="toolbar">
-        <button class="btn" onclick="addExcelRow()">➕ Add Row</button>
-        <button class="btn" onclick="addExcelColumn()">➕ Add Column</button>
-        <button class="btn" onclick="resetExcelTable()" style="color: #a4262c;">🔄 Reset Grid</button>
-        <button class="btn btn-save" style="color: #107c41; border-color: #107c41;">💾 Save as .xlsx</button>
-    </div>
-
-    <div id="toolbar-pdfviewer" class="toolbar">
-        <button class="btn" onclick="triggerPdfUpload()">📂 Open Local PDF</button>
-        <button class="btn" onclick="clearPdf()" style="color: #a4262c;">❌ Close PDF</button>
-    </div>
-
-
-    <div class="workspace-container">
-        
-        <div id="panel-wordpad" class="panel">
-            <textarea class="wordpad-textarea" placeholder="Start typing your text document here..."></textarea>
-        </div>
-
-        <div id="panel-powerpoint" class="panel active">
-            <div class="slide-content-wrapper">
-                <input type="text" class="slide-title" id="slide-title-input" value="Slide Header Deck Title" oninput="updateSlideData()">
-                <textarea class="slide-body" id="slide-body-input" rows="2" oninput="updateSlideData()">Click to Add Slide Text Content Paragraphs...</textarea>
-                
-                <div class="image-placeholder" id="slide-image-container">
-                    <span id="slide-placeholder-text">No canvas image uploaded</span>
+        <!-- 1. WORDPAD HUB -->
+        <div id="view-wordpad" class="office-app-view active-view">
+            <div class="office-ribbon">
+                <select id="wp-font-family" class="office-select" onchange="applyWordpadStyles()">
+                    <option value="Arial" selected>Arial</option>
+                    <option value="'Times New Roman'">Times New Roman</option>
+                    <option value="'Courier New'">Courier New</option>
+                    <option value="Georgia">Georgia</option>
+                    <option value="Impact">Impact</option>
+                    <option value="'Comic Sans MS'">Comic Sans MS</option>
+                    <option value="'Trebuchet MS'">Trebuchet MS</option>
+                    <option value="Garamond">Garamond</option>
+                    <option value="Verdana">Verdana</option>
+                    <option value="'Segoe UI'">Segoe UI</option>
+                </select>
+                <select id="wp-font-size" class="office-select" onchange="applyWordpadStyles()">
+                    <option value="12px">Size 12</option>
+                    <option value="14px" selected>Size 14</option>
+                    <option value="16px">Size 16</option>
+                    <option value="18px">Size 18</option>
+                    <option value="20px">Size 20</option>
+                    <option value="24px">Size 24</option>
+                    <option value="28px">Size 28</option>
+                    <option value="32px">Size 32</option>
+                    <option value="36px">Size 36</option>
+                    <option value="48px">Size 48</option>
+                </select>
+                <span style="border-left:1px solid #d2d0ce; height:20px;"></span>
+                <button class="office-btn" onclick="alignWpHeader('left')">⬅️ Left Hdr</button>
+                <button class="office-btn" onclick="alignWpHeader('center')">🔼 Center Hdr</button>
+                <button class="office-btn" onclick="alignWpHeader('right')">➡️ Right Hdr</button>
+                <span style="flex:1;"></span>
+                <button class="office-btn" style="color:#004b9a; font-weight:bold;" onclick="exportWpDoc()">💾 Save as .doc</button>
+                <button class="office-btn" style="color:#a80000; font-weight:bold;" onclick="exportWpPdf()">💾 Export to .pdf</button>
+            </div>
+            <div class="wordpad-content-wrapper">
+                <div class="wordpad-page-canvas" contenteditable="true" id="wordpad-editor">
+                    <div class="wordpad-header-zone" id="wp-header-element" contenteditable="true">Document Main Title Heading</div>
+                    <p>Begin typing core document paragraphs right inside the interface sheet zone...</p>
                 </div>
             </div>
         </div>
 
-        <div id="panel-excel" class="panel">
-            <div class="excel-table-wrapper">
-                <table class="excel-table" id="excel-grid">
-                    </table>
+        <!-- 2. POWERPOINT STUDIO HUB (INFINITY ENGINE) -->
+        <div id="view-powerpoint" class="office-app-view">
+            <div class="office-ribbon">
+                <button class="office-btn" style="background:#fff4eb; border-color:#fad1b2; font-weight:bold;" onclick="addNewSlide()">➕ Add Slide</button>
+                <span style="border-left:1px solid #d2d0ce; height:20px;"></span>
+                <button class="office-btn" onclick="alignPptHeader('left')">⬅️ Left Title</button>
+                <button class="office-btn" onclick="alignPptHeader('center')">🔼 Center Title</button>
+                <button class="office-btn" onclick="alignPptHeader('right')">➡️ Right Title</button>
+                <button class="office-btn" onclick="document.getElementById('ppt-img-loader').click()">🖼️ Add Slide Image</button>
+                <input type="file" id="ppt-img-loader" accept="image/*" style="display:none;" onchange="loadSlideImg(event)">
+                <span style="flex:1;"></span>
+                <button class="office-btn" style="color:#b83b00; font-weight:bold;" onclick="exportPptFile()">💾 Save as .ppt</button>
+            </div>
+            <div class="ppt-layout-body">
+                <div class="ppt-sidebar" id="ppt-slide-deck-sidebar"></div>
+                <div class="ppt-content-wrapper">
+                    <div class="ppt-slide-canvas">
+                        <div class="ppt-header-box" contenteditable="true" id="ppt-slide-title" oninput="syncSlideData()">Slide Deck Title</div>
+                        <div class="ppt-body-text-box" contenteditable="true" id="ppt-slide-body" oninput="syncSlideData()">Click here to type body description info fields...</div>
+                        <div class="ppt-img-container" id="ppt-img-container-box">
+                            <span style="color:#a19f9d; font-size:12px;" id="ppt-img-placeholder">No image assigned</span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <div id="panel-pdfviewer" class="panel">
-            <div class="pdf-container">
-                <div class="pdf-upload-box" id="pdf-dropzone" onclick="triggerPdfUpload()">
-                    <h3 style="margin: 0 0 10px 0; color: var(--primary-green);">Select a PDF Document</h3>
-                    <p style="margin: 0; color: #666; font-size: 14px;">Click here to load and display any PDF inside the workspace</p>
+        <!-- 3. EXCEL MATRIX HUB (INFINITY ENGINE) -->
+        <div id="view-excel" class="office-app-view">
+            <div class="office-ribbon">
+                <button class="office-btn" style="background:#e2f6ea; color:#107c41; font-weight:bold;" onclick="runExcelAutoSum()">🧮 AutoSum Row 1</button>
+                <button class="office-btn" onclick="resizeExcelGridCells(35)">➕ Increase Cell Size</button>
+                <button class="office-btn" onclick="resizeExcelGridCells(-35)">➖ Decrease Cell Size</button>
+                <button class="office-btn" onclick="appendExcelRow()">➕ Add Infinite Row</button>
+                <span style="flex:1;"></span>
+                <button class="office-btn" style="color:#107c41; font-weight:bold;" onclick="exportExcelFile()">💾 Save as .exl</button>
+            </div>
+            <div class="excel-scroll-zone">
+                <table class="excel-table" id="excel-table-element">
+                    <thead>
+                        <tr id="xl-header-row">
+                            <th style="width:50px;"></th>
+                            <th class="xl-col" style="width:110px;">A</th>
+                            <th class="xl-col" style="width:110px;">B</th>
+                            <th class="xl-col" style="width:110px;">C</th>
+                            <th class="xl-col" style="width:110px;">D (Sum)</th>
+                            <th class="xl-col" style="width:110px;">E</th>
+                        </tr>
+                    </thead>
+                    <tbody id="excel-tbody-element"></tbody>
+                </table>
+            </div>
+            <div class="excel-chart-box">
+                <div class="pie-chart-vector" id="excel-pie-chart"></div>
+                <div style="font-size:12px;">
+                    <strong>Live Tracker Graph:</strong><br>
+                    <span style="color:#0078d4;">■</span> Cell A1 Value | <span style="color:#d83b01;">■</span> Cell B1 Value | <span style="color:#ffb900;">■</span> Cell C1 Value
                 </div>
-                <input type="file" id="pdf-file-input" class="hidden-file-input" accept="application/pdf" onchange="loadPdfDocument(event)">
-                <iframe class="pdf-frame" id="pdf-frame-element"></iframe>
             </div>
         </div>
 
     </div>
 
     <script>
-        // --- Navigation and State Logic ---
-        function switchTab(tabId) {
-            // Update active tab style
-            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
-            event.currentTarget.classList.add('active');
-
-            // Update visible toolbar
-            document.querySelectorAll('.toolbar').forEach(tb => tb.classList.remove('active'));
-            document.getElementById(`toolbar-${tabId}`).classList.add('active');
-
-            // Update visible workspace panel
-            document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-            document.getElementById(`panel-${tabId}`).classList.add('active');
+        // GLOBAL APP ROUTER SWITCHER
+        function switchActiveTab(targetTabId) {
+            document.querySelectorAll('.office-tab').forEach(b => b.classList.remove('active-tab'));
+            document.querySelectorAll('.office-app-view').forEach(v => v.classList.remove('active-view'));
+            document.getElementById('tab-' + targetTabId).classList.add('active-tab');
+            document.getElementById('view-' + targetTabId).classList.add('active-view');
         }
 
-        // --- PowerPoint Multi-Slide Logic ---
-        let slidesData = [
-            { title: "Slide Header Deck Title", body: "Click to Add Slide Text Content Paragraphs...", image: null }
-        ];
-        let currentSlideIndex = 0;
-
-        function updateSlideUI() {
-            const slide = slidesData[currentSlideIndex];
-            document.getElementById('slide-title-input').value = slide.title;
-            document.getElementById('slide-body-input').value = slide.body;
-            
-            const container = document.getElementById('slide-image-container');
-            if (slide.image) {
-                container.innerHTML = `<img src="${slide.image}" alt="Slide Image">`;
-            } else {
-                container.innerHTML = `<span id="slide-placeholder-text">No canvas image uploaded</span>`;
-            }
-
-            document.getElementById('slide-indicator').innerText = `Slide ${currentSlideIndex + 1} of ${slidesData.length}`;
+        function downloadDataBlob(filename, data, mime) {
+            var blob = new Blob([data], {type: mime});
+            var a = document.createElement('a');
+            a.download = filename; a.href = window.URL.createObjectURL(blob);
+            a.style.display = 'none'; document.body.appendChild(a);
+            a.click(); a.remove();
         }
 
-        function updateSlideData() {
-            slidesData[currentSlideIndex].title = document.getElementById('slide-title-input').value;
-            slidesData[currentSlideIndex].body = document.getElementById('slide-body-input').value;
+        // ================= WORDPAD LAYER =================
+        function applyWordpadStyles() {
+            var canvas = document.getElementById('wordpad-editor');
+            canvas.style.fontSize = document.getElementById('wp-font-size').value;
+            canvas.style.fontFamily = document.getElementById('wp-font-family').value;
+        }
+        function alignWpHeader(pos) { document.getElementById('wp-header-element').style.textAlign = pos; }
+        function exportWpDoc() { downloadDataBlob("document.doc", document.getElementById('wordpad-editor').innerText, "text/plain;charset=utf-8"); }
+        function exportWpPdf() {
+            var w = window.open('', '_blank', 'width=800,height=600');
+            w.document.write('<html><head><style>body{font-family:'+document.getElementById('wp-font-family').value+'; font-size:'+document.getElementById('wp-font-size').value+'; padding:40px;}</style></head><body>'+document.getElementById('wordpad-editor').innerHTML+'</body></html>');
+            w.document.close(); w.print();
         }
 
-        function createNewSlide() {
-            slidesData.push({
-                title: "New Slide Title",
-                body: "Click to Add Slide Text Content Paragraphs...",
-                image: null
+        // ================= INFINITE POWERPOINT MODULE SYSTEM =================
+        var slidesMemoryArray = [];
+        var activeSlideIndex = 0;
+
+        function addNewSlide() {
+            var cleanSlideObject = {
+                title: "Slide Layout Header " + (slidesMemoryArray.length + 1),
+                body: "Click to write and type description summaries inside the presentation body here...",
+                align: "center",
+                imgSrc: ""
+            };
+            slidesMemoryArray.push(cleanSlideObject);
+            activeSlideIndex = slidesMemoryArray.length - 1;
+            rebuildSlideSidebarThumbnails();
+            renderActiveSlideToWorkspaceCanvas();
+        }
+
+        function rebuildSlideSidebarThumbnails() {
+            var sidebar = document.getElementById('ppt-slide-deck-sidebar');
+            sidebar.innerHTML = "";
+            slidesMemoryArray.forEach((slide, idx) => {
+                var thumb = document.createElement('div');
+                thumb.className = "ppt-thumb" + (idx === activeSlideIndex ? " active-thumb" : "");
+                thumb.innerText = "Slide " + (idx + 1) + "\n" + slide.title.substring(0, 12) + "...";
+                thumb.onclick = function() { activeSlideIndex = idx; rebuildSlideSidebarThumbnails(); renderActiveSlideToWorkspaceCanvas(); };
+                sidebar.appendChild(thumb);
             });
-            currentSlideIndex = slidesData.length - 1;
-            updateSlideUI();
         }
 
-        function navigateSlide(direction) {
-            let targetIndex = currentSlideIndex + direction;
-            if (targetIndex >= 0 && targetIndex < slidesData.length) {
-                currentSlideIndex = targetIndex;
-                updateSlideUI();
-            }
-        }
-
-        function deleteCurrentSlide() {
-            if (slidesData.length === 1) {
-                alert("You must keep at least one slide.");
-                return;
-            }
-            slidesData.splice(currentSlideIndex, 1);
-            if (currentSlideIndex >= slidesData.length) {
-                currentSlideIndex = slidesData.length - 1;
-            }
-            updateSlideUI();
-        }
-
-        function triggerSlideImageUpload() {
-            document.getElementById('slide-img-input').click();
-        }
-
-        function loadSlideImage(event) {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    slidesData[currentSlideIndex].image = e.target.result;
-                    updateSlideUI();
-                };
-                reader.readAsDataURL(file);
-            }
-        }
-
-        function setSlideAlignment(alignment) {
-            document.getElementById('slide-title-input').style.textAlign = alignment;
-            document.getElementById('slide-body-input').style.textAlign = alignment;
-        }
-
-
-        // --- Excel Unlimited Cells Logic ---
-        let excelRows = 10;
-        let excelCols = 6;
-
-        function getColumnLabel(index) {
-            let label = "";
-            while (index >= 0) {
-                label = String.fromCharCode((index % 26) + 65) + label;
-                index = Math.floor(index / 26) - 1;
-            }
-            return label;
-        }
-
-        function buildExcelGrid() {
-            const table = document.getElementById('excel-grid');
-            table.innerHTML = "";
-
-            // Header Row
-            const headerRow = document.createElement('tr');
-            const cornerHeader = document.createElement('th');
-            cornerHeader.style.width = "40px";
-            headerRow.appendChild(cornerHeader);
-
-            for (let c = 0; c < excelCols; c++) {
-                const th = document.createElement('th');
-                th.innerText = getColumnLabel(c);
-                headerRow.appendChild(th);
-            }
-            table.appendChild(headerRow);
-
-            // Data Rows
-            for (let r = 0; r < excelRows; r++) {
-                const row = document.createElement('tr');
-                const indexCell = document.createElement('th');
-                indexCell.innerText = r + 1;
-                row.appendChild(indexCell);
-
-                for (let c = 0; c < excelCols; c++) {
-                    const td = document.createElement('td');
-                    const input = document.createElement('input');
-                    input.type = "text";
-                    td.appendChild(input);
-                    row.appendChild(td);
-                }
-                table.appendChild(row);
-            }
-        }
-
-        function addExcelRow() {
-            excelRows++;
-            buildExcelGrid();
-        }
-
-        function addExcelColumn() {
-            excelCols++;
-            buildExcelGrid();
-        }
-
-        function resetExcelTable() {
-            excelRows = 10;
-            excelCols = 6;
-            buildExcelGrid();
-        }
-
-
-        // --- PDF Viewer Functional Logic ---
-        function triggerPdfUpload() {
-            document.getElementById('pdf-file-input').click();
-        }
-
-        function loadPdfDocument(event) {
-            const file = event.target.files[0];
-            if (file && file.type === "application/pdf") {
-                const fileURL = URL.createObjectURL(file);
-                const frame = document.getElementById('pdf-frame-element');
-                const dropzone = document.getElementById('pdf-dropzone');
-                
-                frame.src = fileURL;
-                frame.style.display = "block";
-                dropzone.style.display = "none";
-            } else {
-                alert("Please select a valid PDF file.");
-            }
-        }
-
-        function clearPdf() {
-            const frame = document.getElementById('pdf-frame-element');
-            const dropzone = document.getElementById('pdf-dropzone');
+        function renderActiveSlideToWorkspaceCanvas() {
+            if(slidesMemoryArray.length === 0) return;
+            var currentSlide = slidesMemoryArray[activeSlideIndex];
+            document.getElementById('ppt-slide-title').innerText = currentSlide.title;
+            document.getElementById('ppt-slide-title').style.textAlign = currentSlide.align;
+            document.getElementById('ppt-slide-body').innerText = currentSlide.body;
             
-            frame.src = "";
-            frame.style.display = "none";
-            dropzone.style.display = "block";
-            document.getElementById('pdf-file-input').value = "";
+            var container = document.getElementById('ppt-img-container-box');
+            container.innerHTML = "";
+            if(currentSlide.imgSrc) {
+                var img = document.createElement('img'); img.className = "ppt-slide-img"; img.src = currentSlide.imgSrc;
+                container.appendChild(img);
+            } else {
+                container.innerHTML = '<span style="color:#a19f9d; font-size:12px;" id="ppt-img-placeholder">No image assigned</span>';
+            }
         }
 
-        // Initialize default app layouts
-        window.onload = function() {
-            buildExcelGrid();
-            updateSlideUI();
-        };
+        function syncSlideData() {
+            if(slidesMemoryArray.length === 0) return;
+            slidesMemoryArray[activeSlideIndex].title = document.getElementById('ppt-slide-title').innerText;
+            slidesMemoryArray[activeSlideIndex].body = document.getElementById('ppt-slide-body').innerText;
+        }
+
+        function alignPptHeader(pos) {
+            if(slidesMemoryArray.length === 0) return;
+            slidesMemoryArray[activeSlideIndex].align = pos;
+            document.getElementById('ppt-slide-title').style.textAlign = pos;
+        }
+
+        function loadSlideImg(e) {
+            if(slidesMemoryArray.length === 0) return;
+            var reader = new FileReader();
+            reader.onload = function(evt) {
+                slidesMemoryArray[activeSlideIndex].imgSrc = evt.target.result;
+                renderActiveSlideToWorkspaceCanvas();
+            };
+            if(e.target.files[0]) reader.readAsDataURL(e.target.files[0]);
+        }
+
+        function exportPptFile() {
+            var payload = "";
+            slidesMemoryArray.forEach((s, idx) => {
+                payload += "--- SLIDE " + (idx+1) + " ---\nTitle: " + s.title + "\nAlign: " + s.align + "\nBody: " + s.body + "\n\n";
+            });
+            downloadDataBlob("presentation.ppt", payload || "Empty Slide Deck Content Layout Framework", "text/plain;charset=utf-8");
+        }
+
+        // ================= INFINITE EXCEL LAYER ENGINE =================
+        var totalActiveRows = 0;
+        function appendExcelRow() {
+            totalActiveRows++;
+            var tbody = document.getElementById('excel-tbody-element');
+            var tr = document.createElement('tr');
+            tr.className = "xl-row"; tr.style.height = "35px";
+            
+            tr.innerHTML = `
+                <td style="text-align:center; background:#f3f2f1; font-weight:600; font-size:11px;">${totalActiveRows}</td>
+                <td><input type="number" class="excel-cell-input" value="${totalActiveRows === 1 ? '30' : ''}" id="ex-a-${totalActiveRows}" oninput="runExcelAutoSum()"></td>
+                <td><input type="number" class="excel-cell-input" value="${totalActiveRows === 1 ? '45' : ''}" id="ex-b-${totalActiveRows}" oninput="runExcelAutoSum()"></td>
+                <td><input type="number" class="excel-cell-input" value="${totalActiveRows === 1 ? '25' : ''}" id="ex-c-${totalActiveRows}" oninput="runExcelAutoSum()"></td>
+                <td><input type="text" class="excel-cell-input" id="ex-d-${totalActiveRows}" readonly style="background:#f9f9f9; font-weight:bold; color:#107c41;"></td>
+                <td><input type="text" class="excel-cell-input"></td>
+            `;
+            tbody.appendChild(tr);
+            if(totalActiveRows === 1) runExcelAutoSum();
+        }
+
+        function runExcelAutoSum() {
+            for(var i = 1; i <= totalActiveRows; i++) {
+                var a = parseFloat(document.getElementById('ex-a-' + i).value) || 0;
+                var b = parseFloat(document.getElementById('ex-b-' + i).value) || 0;
+                var c = parseFloat(document.getElementById('ex-c-' + i).value) || 0;
+                document.getElementById('ex-d-' + i).value = "Σ " + (a + b + c);
+            }
+            renderPieChart();
+        }
+
+        function resizeExcelGridCells(amt) {
+            document.querySelectorAll('.xl-col').forEach(th => {
+                var w = (parseInt(th.style.width) || 110) + amt;
+                if(w > 60 && w < 250) th.style.width = w + 'px';
+            });
+            document.querySelectorAll('.xl-row').forEach(tr => {
+                var h = (parseInt(tr.style.height) || 35) + (amt/2);
+                if(h > 24 && h < 120) tr.style.height = h + 'px';
+            });
+        }
+
+        function renderPieChart() {
+            if(totalActiveRows === 0) return;
+            var a = Math.max(0, parseFloat(document.getElementById('ex-a-1').value) || 0);
+            var b = Math.max(0, parseFloat(document.getElementById('ex-b-1').value) || 0);
+            var c = Math.max(0, parseFloat(document.getElementById('ex-c-1').value) || 0);
+            var total = a + b + c;
+            if(total === 0) { a = 1; b = 1; c = 1; total = 3; }
+            var degA = (a / total) * 360;
+            var degB = degA + ((b / total) * 360);
+            document.getElementById('excel-pie-chart').style.background = "conic-gradient(#0078d4 0deg "+degA+"deg, #d83b01 "+degA+"deg "+degB+"deg, #ffb900 "+degB+"deg 360deg)";
+        }
+
+        function exportExcelFile() {
+            var data = "A,B,C,Sum,E\n";
+            for(var i=1; i<=totalActiveRows; i++) {
+                data += document.getElementById('ex-a-'+i).value + "," + document.getElementById('ex-b-'+i).value + "," + document.getElementById('ex-c-'+i).value + "," + document.getElementById('ex-d-'+i).value + "\n";
+            }
+            downloadDataBlob("worksheet.exl", data, "text/csv;charset=utf-8");
+        }
+
+        // INITIAL DATA CONTEXT LOADERS RUNTIME
+        addNewSlide();
+        for(var r=0; r<5; r++) appendExcelRow();
     </script>
 </body>
 </html>
